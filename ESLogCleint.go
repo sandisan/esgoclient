@@ -27,7 +27,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	    data, _ := ioutil.ReadAll( resp.Body )
 	    // close response body
 	    resp.Body.Close()
-	    io.WriteString(w, string(resp))
+	    io.WriteString(w, string(data))
     }
 	
 }

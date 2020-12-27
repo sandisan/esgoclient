@@ -33,7 +33,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
         TLSClientConfig: conf,
     }	
     client := &http.Client{Transport: tr}
-    resp, err := client.Get("https://elasticsearch.ibm-common-services.svc:9200/_cluster/health")
+    resp, err := client.Get("https://elasticsearch:9200/_cluster/health")
     if err != nil {
 	fmt.Println(err)
 	io.WriteString(w, err.Error())

@@ -36,12 +36,16 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
       caCert, err := ioutil.ReadFile("elk-ca.crt")
       if err != nil {
               log.Fatal(err)
+	      io.WriteString(w, err.Error())
+	      return
        }
        caCertPool := x509.NewCertPool()
        caCertPool.AppendCertsFromPEM(caCert)
       cert, err := tls.LoadX509KeyPair("elk.crt", "elk.key")
        if err != nil {
                log.Fatal(err)
+	       io.WriteString(w, err.Error())
+	      return
        }
 
         client := &http.Client{
@@ -57,12 +61,19 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 	fmt.Println(err)
 	io.WriteString(w, err.Error())
+	return
     }else {
 	    // read all response body
-	    data, _ := ioutil.ReadAll( resp.Body )
-	    // close response body
-	    resp.Body.Close()
-	    io.WriteString(w, string(data))
+	    data, err := ioutil.ReadAll( resp.Body )
+	    if err != nil {
+		fmt.Println(err)
+		io.WriteString(w, err.Error())
+		return
+	    } else {
+	  	 // close response body
+	    	resp.Body.Close()
+	    	io.WriteString(w, string(data))  
+	    }
     }
 	
 }

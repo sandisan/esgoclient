@@ -33,7 +33,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 //   tr := &http.Transport{
 //         TLSClientConfig: conf,
 //     }
-      caCert, err := ioutil.ReadFile("elk-ca.crt")
+      caCert, err := ioutil.ReadFile("elk-ca.pem")
       if err != nil {
               log.Fatal(err)
 	      io.WriteString(w, err.Error())
@@ -41,7 +41,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
        }
        caCertPool := x509.NewCertPool()
        caCertPool.AppendCertsFromPEM(caCert)
-      cert, err := tls.LoadX509KeyPair("elk.crt", "elk.key")
+      cert, err := tls.LoadX509KeyPair("elk-crt.pem", "elk-key.pem")
        if err != nil {
                log.Fatal(err)
 	       io.WriteString(w, err.Error())

@@ -3,8 +3,10 @@ package main
 import (
 	"io"
 	"fmt"
+	"log"
 	"net/http"
 	"crypto/tls"
+	"crypto/x509"
 	"io/ioutil"
 )
 
@@ -13,11 +15,23 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	
-    tr := &http.Transport{
-        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
-	
+
+	cert, err := ioutil.ReadFile("elk.crt")
+	if err != nil {
+		log.Fatalf("Couldn't load file", err)
+	}
+	certPool := x509.NewCertPool()
+	certPool.AppendCertsFromPEM(cert)
+
+	conf := &tls.Config{
+		RootCAs: certPool,
+	}
+//     tr := &http.Transport{
+//         TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+//     }
+  tr := &http.Transport{
+        TLSClientConfig: conf,
+    }	
     client := &http.Client{Transport: tr}
     resp, err := client.Get("https://elasticsearch.ibm-common-services.svc:9200/_cluster/health")
     if err != nil {

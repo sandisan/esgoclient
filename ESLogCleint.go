@@ -33,7 +33,13 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 //   tr := &http.Transport{
 //         TLSClientConfig: conf,
 //     }
- cert, err := tls.LoadX509KeyPair("elk.crt", "elk.key")
+      caCert, err := ioutil.ReadFile("elk-ca.crt")
+      if err != nil {
+              log.Fatal(err)
+       }
+       caCertPool := x509.NewCertPool()
+       caCertPool.AppendCertsFromPEM(caCert)
+      cert, err := tls.LoadX509KeyPair("elk.crt", "elk.key")
        if err != nil {
                log.Fatal(err)
        }

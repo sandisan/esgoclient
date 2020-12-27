@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"crypto/tls"
-	"crypto/x509"
+	//"crypto/x509"
 	"io/ioutil"
 )
 
@@ -33,7 +33,8 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 //   tr := &http.Transport{
 //         TLSClientConfig: conf,
 //     }
-      caCert, err := ioutil.ReadFile("elk-ca.pem")
+//      caCert, err := ioutil.ReadFile("elk-ca.pem")
+	caCert, err := ioutil.ReadFile("elk.crt")
       if err != nil {
               log.Fatal(err)
 	      io.WriteString(w, err.Error())
@@ -41,22 +42,29 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
        }
        caCertPool := x509.NewCertPool()
        caCertPool.AppendCertsFromPEM(caCert)
-      cert, err := tls.LoadX509KeyPair("elk-crt.pem", "elk-key.pem")
-       if err != nil {
-               log.Fatal(err)
-	       io.WriteString(w, err.Error())
-	      return
-       }
+//       cert, err := tls.LoadX509KeyPair("elk-crt.pem", "elk-key.pem")
+//        if err != nil {
+//                log.Fatal(err)
+// 	       io.WriteString(w, err.Error())
+// 	      return
+//        }
 
-        client := &http.Client{
-                Transport: &http.Transport{
-                        TLSClientConfig: &tls.Config{
-                                RootCAs:      caCertPool,
-                               Certificates: []tls.Certificate{cert},
-                        },
-                },
-        }
+//         client := &http.Client{
+//                 Transport: &http.Transport{
+//                         TLSClientConfig: &tls.Config{
+//                                 RootCAs:      caCertPool,
+//                                Certificates: []tls.Certificate{cert},
+//                         },
+//                 },
+//         }
     //client := &http.Client{Transport: tr}
+	client := &http.Client{
+        Transport: &http.Transport{
+            TLSClientConfig: &tls.Config{
+                RootCAs:      caCertPool,
+            },
+        },
+    }
     resp, err := client.Get("https://elasticsearch:9200/_cluster/health")
     if err != nil {
 	fmt.Println(err)

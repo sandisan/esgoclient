@@ -25,6 +25,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 
 	conf := &tls.Config{
 		RootCAs: certPool,
+		InsecureSkipVerify: true,
 	}
 //     tr := &http.Transport{
 //         TLSClientConfig: &tls.Config{InsecureSkipVerify: true},

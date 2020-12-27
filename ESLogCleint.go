@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"io/ioutil"
+	_ "github.com/nvn1729/badimportdemo/dontimportme"
 )
 
 func main() {

@@ -118,7 +118,7 @@ func postDataHandler(w http.ResponseWriter, r *http.Request) {
 	transport := &http.Transport{TLSClientConfig: tlsConfig}
 	client := &http.Client{Transport: transport}
 	
-	resp, err := http.Post("https://elasticsearch:9200/ace-index/_doc", "application/json", buf)
+	resp, err := client.Post("https://elasticsearch:9200/ace-index/_doc", "application/json", buf)
 
 	//resp, err := client.Get("https://elasticsearch:9200/_cluster/health")
 	if err != nil {

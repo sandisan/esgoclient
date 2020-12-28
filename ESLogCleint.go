@@ -181,7 +181,7 @@ func putDataHandler(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{Transport: transport}
 	
 	request, err := http.NewRequest("PUT", "https://elasticsearch:9200/ace-index", nil)
-	request.ContentType = "application/json"
+	request.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(request)
 	
 	//resp, err := http.Post("https://elasticsearch:9200/_cluster/health", "application/json", &buf)

@@ -27,7 +27,10 @@ func main() {
 }
 
 func getDataHandler(w http.ResponseWriter, r *http.Request) {
-
+	// read the body
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r.Body)
+	
 	flag.Parse()
 
 	// Load client cert
@@ -58,7 +61,8 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	transport := &http.Transport{TLSClientConfig: tlsConfig}
 	client := &http.Client{Transport: transport}
 
-	resp, err := client.Get("https://elasticsearch:9200/ace-index/_search?pretty=true&q=*:*")
+	//resp, err := client.Get("https://elasticsearch:9200/ace-index/_search?pretty=true&q=*:*")
+	resp, err := client.Post("https://elasticsearch:9200/ace-index/_search", "application/json", buf)
 	if err != nil {
 		fmt.Println(err)
 		io.WriteString(w, err.Error())
